@@ -1,0 +1,21 @@
+{
+  "presets": [
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
+  ],
+  "plugins": [
+    "transform-vue-jsx", 
+    "transform-runtime",
+    // 一款 babel 插件，它会在编译过程中将 import 的写法自动转换为按需引入的方式
+    ["import", {
+      "libraryName": "vant",
+      "libraryDirectory": "es",
+      "style": true
+    }]
+  ]
+}
