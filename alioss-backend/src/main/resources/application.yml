@@ -8,7 +8,7 @@ aliyun:
     file:
       endpoint: oss-cn-hangzhou.aliyuncs.com
       keyid: LTAI4Fn9Q8Ld4NhVrShy9LZo
-      keysecret: HPzReljzlV0be78a35z8eLrjqcMgNV
+      keysecret: AAAAAAAAAAAA
       bucketname: cksspk-work
       expireTime: 30  #过期时间
       dir: alidemo/
