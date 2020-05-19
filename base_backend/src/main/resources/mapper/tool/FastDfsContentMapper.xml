@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ckss.blog.home.tool.mapper.FastDfsContentMapper">
+
+    <resultMap type="com.ckss.blog.home.tool.domain.FastDfsContent" id="FastDfsContentMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="group" column="group"/>
+        <result property="size" column="size"/>
+        <result property="url" column="url"/>
+        <result property="suffix" column="suffix"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insertContent" useGeneratedKeys="true" keyProperty="id">
+        insert into fast_dfs_conten(
+        <if test="name != null and name != ''">name,</if>
+        <if test="group != null and group != ''">`group`,</if>
+        <if test="size != null and size != ''">size,</if>
+        <if test="url != null and url != ''">url,</if>
+        <if test="suffix != null and suffix != ''">suffix,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="name != null and name != ''">#{name},</if>
+        <if test="group != null and group != ''">#{group},</if>
+        <if test="size != null and size != ''">#{size},</if>
+        <if test="url != null and url != ''">#{url},</if>
+        <if test="suffix != null and suffix != ''">#{suffix},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <!--查询单个-->
+    <select id="selectContentById" resultMap="FastDfsContentMap">
+        select id, name, group, size, url, suffix, create_by, create_time
+        from fast_dfs_conten
+        where id = #{id}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="selectContentList" resultMap="FastDfsContentMap">
+        select id, name, `group`, size, url, suffix, create_by, create_time
+        from fast_dfs_conten
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="group != null and group != ''">
+                and `group` = #{group}
+            </if>
+            <if test="suffix != null and suffix != ''">
+                and suffix = #{suffix}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    <select id="selectContentByIds" resultType="com.ckss.blog.home.tool.domain.AliOssContent">
+        select id, name, group, size, url, suffix, create_by, create_time
+        from fast_dfs_conten
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!--通过主键删除-->
+    <delete id="deleteContentByIds">
+        delete from fast_dfs_conten where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="clearContent">
+        TRUNCATE TABLE fast_dfs_conten
+    </delete>
+
+</mapper>
