@@ -8,6 +8,12 @@ import Search from '@/components/search/index'
 
 //新闻列表
 import NewsList from '@/views/news/index'
+//新闻内容
+import NewsDetail from '@/views/news/NewsDetail'
+
+//图片列表
+import PhotoList from '@/views/photo/index'
+
 import Test from '@/views/test/index'
 
 Vue.use(Router)
@@ -39,10 +45,23 @@ export default new Router({
       name: 'Search',
       component: Search,
     },
+    //新闻列表
     {
-      path: '/list',
+      path: '/news/list',
       name: 'NewsList',
       component: NewsList
+    },
+     //新闻内容
+     {
+      path: '/news/detail',
+      name: 'Detail',
+      component: NewsDetail
+    },
+     //图片列表
+     {
+      path: '/photo/list/:categoryId',
+      name: 'photo.list',
+      component: PhotoList
     },
     {
       path: '/test',

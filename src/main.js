@@ -7,8 +7,9 @@ import Axios from 'axios'
 
 //使用vant引入全部组件
 import vant from 'vant'
-//全局css
 
+//全局css
+import './assets/resset.css'
 import 'vant/lib/index.css'
 
 //使用moment对时间进行格式化

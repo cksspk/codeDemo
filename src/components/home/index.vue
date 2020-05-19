@@ -44,7 +44,7 @@ Vue.use(Lazyload);
 //九宫格数据
 var grids = [
   {id:1,src: g1, title:'新闻资讯',router:{name:'NewsList'}},
-  {id:2,src: g2, title:'肉禽蛋类',router:{name:'Test'}},
+  {id:2,src: g2, title:'图文分享',router:{name:'photo.list',params:{categoryId:0}}},
   {id:3,src: g3, title:'水产海鲜',router:{name:'NewsList'}},
   {id:4,src: g4, title:'新鲜水果',router:{name:'news.list'}},
   {id:5,src: g5, title:'粮油调味',router:{name:'news.list'}},

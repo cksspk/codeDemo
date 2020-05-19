@@ -14,7 +14,7 @@
           <ul v-for="(news) in newsList" :key="news.id">
           <!-- <ul> -->
             <li>
-              <a href="#">
+              <router-link :to='{name:"Detail",query:{id:news.id}}' href="#">
                 <div class="new_img">
                   <!-- <img src="https://n.sinaimg.cn/default/feedbackpics/transform/116/w550h366/20180418/w4eZ-fzihnep5214985.png" alt=""> -->
                   <img :src="news.img_url" alt="">
@@ -28,11 +28,12 @@
                     <p>
                       <span class="praise">点赞数：{{news.click}}</span>
                       <!-- <span class="time">发表时间：{{moment(news.add_time).format('YYYY-MM-DD HH:mm:SS')}}</span> -->
-                      <span class="time">发表时间：{{news.add_time |  dateformat('YYYY-MM-DD')}}</span>
+                      <span class="time">发表时间：{{news.add_time | dateformat('YYYY-MM-DD')}}</span>
                     </p>
                   </div>
                 </div>
-              </a>
+                </router-link>
+              <!-- </a> -->
             </li>
           </ul>
 
@@ -104,8 +105,7 @@ export default {
 
     //请求本地json数据
     this.$axios.get('static/data/newsList.json').then(resp=>{
-      console.log('请求数据成功：',resp.data);
-
+      // console.log('请求数据成功：',resp.data);
       this.newsList = resp.data
     }).catch(err=>{
       console.log('err:',err);
