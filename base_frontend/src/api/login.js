@@ -23,7 +23,8 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    // url: '/user/logout',
+    url: '/sys/logout',
     method: 'post'
   })
 }

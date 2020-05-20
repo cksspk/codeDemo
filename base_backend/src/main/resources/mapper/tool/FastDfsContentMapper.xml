@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ckss.blog.home.tool.mapper.FastDfsContentMapper">
+<mapper namespace="com.ckss.project.tool.mapper.FastDfsContentMapper">
 
-    <resultMap type="com.ckss.blog.home.tool.domain.FastDfsContent" id="FastDfsContentMap">
+    <resultMap type="com.ckss.project.tool.domain.FastDfsContent" id="FastDfsContentMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="group" column="group"/>
@@ -62,7 +62,7 @@
             </if>
         </where>
     </select>
-    <select id="selectContentByIds" resultType="com.ckss.blog.home.tool.domain.AliOssContent">
+    <select id="selectContentByIds" resultType="com.ckss.project.tool.domain.AliOssContent">
         select id, name, group, size, url, suffix, create_by, create_time
         from fast_dfs_conten
         where id in

@@ -249,7 +249,7 @@
       getCategory() {
         listCategory().then(response => {
             console.log('查询分类，返回：',response)
-            if (response.success) {
+            if (response.code === 200) {
               this.categoryOptions = response.data.list;
             } else {
               this.msgError(response.msg);
@@ -260,7 +260,7 @@
       fetchData(id) {
         getBlog(id).then(response => {
           
-          if (!response.success) {
+          if (!response.code === 200) {
             this.msgError(response.message);
             return;
           }
@@ -291,7 +291,7 @@
               });
             } else {
               updateBlog(obj).then(response => {
-                if (response.success) {
+                if (response.code === 200) {
                   this.msgSuccess("发布成功");
                   this.$store.dispatch('tagsView/delView', this.$route);
                   this.$router.push({path: '/blogManage/blog'})

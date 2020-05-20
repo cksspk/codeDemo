@@ -55,8 +55,10 @@ export default {
         this.loading = true;
         list(this.base, this.addDateRange(this.queryParams, this.dateRange)).then(response => {
           // debugger
-          this.total = response.data.totalPage;
-          this.list = response.data.list;
+          // this.total = response.data.totalPage;
+          // this.list = response.data.list;
+          this.total = response.total;
+          this.list = response.rows;
           setTimeout(() => {
             this.loading = false
           }, this.time);
@@ -92,7 +94,7 @@ export default {
       return new Promise((resolve, reject) => {
         del(this.base, id).then(response => {
           this.delLoading = false;
-          if (response.success) {
+          if (response.code === 200) {
             this.$refs[id].doClose();
             this.init();
             this.msgSuccess("删除成功");
@@ -123,7 +125,7 @@ export default {
         if (valid) {
           if (this.form.id != undefined) {
             update(this.base, obj).then(response => {
-              if (response.success) {
+              if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
                 this.init();
@@ -133,7 +135,7 @@ export default {
             });
           } else {
             add(this.base, obj).then(response => {
-              if (response.success) {
+              if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
                 this.init();
@@ -180,7 +182,7 @@ export default {
       }).then(function () {
         del($this.base, $this.ids).then(response => {
           $this.delLoading = false;
-          if (response.success) {
+          if (response.code === 200) {
             $this.init();
             $this.msgSuccess("删除成功");
           } else {
@@ -204,7 +206,7 @@ export default {
       }).then(function () {
         clean($this.base).then(response => {
           $this.delLoading = false;
-          if (response.success) {
+          if (response.code === 200) {
             $this.init();
             $this.msgSuccess("清空成功");
           } else {

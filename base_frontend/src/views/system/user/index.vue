@@ -228,7 +228,6 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orderByColumn: "create_time",
-        isAsc: true
       },
       // // 表单校验
       rules: {
@@ -272,9 +271,9 @@ export default {
       this.loading = true;
       listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response=>{
         // debugger
-        if(response.success){
-          this.total = response.data.totalPage
-          this.list = response.data.userList
+        if(response.code === 200){
+          this.total = response.total;
+          this.list = response.rows;
           // console.log(response)
           // console.log('this.list:',this.list)
         }
@@ -284,8 +283,9 @@ export default {
     /** 查询角色列表 */
     getRoles() {
       optionSelect().then(response => {
+        // debugger
         // console.log('角色ids',response.data.roles)
-        this.roleOptions = response.data.roles;
+        this.roleOptions = response.data;
         // console.log('roleOptions:',this.roleOptions)
       });
     },
@@ -309,7 +309,7 @@ export default {
       delUser(id).then(response=>{
         this.$refs[id].doClose();
         this.loading = false;
-        if(response.success){
+        if(response.code === 200){
           //删除成功
           this.$message({
             type: 'success',
@@ -354,7 +354,7 @@ export default {
       }).then(function () {
         delUser($this.ids).then(response => {
           $this.delLoading = false;
-          if (response.success) {
+          if (response.code === 200) {
             $this.getList()
             $this.msgSuccess("删除成功");
           } else {
@@ -377,7 +377,7 @@ export default {
       }).then(function () {
         return changeUserStatus(row.id, row.status);
       }).then((response) => {
-        if (response.success) {
+        if (response.code === 200) {
           this.msgSuccess(text + "成功");
         } else {
           this.msgError(text + "失败");
@@ -417,8 +417,9 @@ export default {
       this.reset();
       this.getRoles();
       getUser(row.id).then(response => {
-        this.form = response.data.user;
-        this.form.roleIds = response.data.roleIds;
+        debugger
+        this.form = response.data;
+        this.form.roleIds = response.roleIds;
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
@@ -427,12 +428,13 @@ export default {
     /** 提交按钮 */
     submitForm: function () {
       this.$refs["form"].validate(valid => {
+        debugger
         if (valid) {
-          // console.log('提交表单：this.form',this.form)
+          console.log('提交表单：this.form',this.form)
           if (this.form.id != undefined) {
             //临时修改权限
             updateUser(this.form).then(response => {
-              if (response.success) {
+              if (response.code === 200) {
                 this.msgSuccess("修改成功");
                 this.open = false;
                 // this.init();
@@ -443,7 +445,7 @@ export default {
             });
           } else {
             addUser(this.form).then(response => {
-              if (response.success) {
+              if (response.code === 200) {
                 this.msgSuccess("新增成功");
                 this.open = false;
                 // this.init();

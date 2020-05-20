@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ckss.blog.home.blog.mapper.TagMapper">
+<mapper namespace="com.ckss.project.blog.mapper.TagMapper">
 
-    <resultMap type="com.ckss.blog.home.blog.domain.Tag" id="TagResult">
+    <resultMap type="com.ckss.project.blog.domain.Tag" id="TagResult">
         <result property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="color" column="color"/>
@@ -13,7 +13,7 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
 
-    <select id="selectTagList" parameterType="com.ckss.blog.home.blog.domain.Tag" resultMap="TagResult">
+    <select id="selectTagList" parameterType="com.ckss.project.blog.domain.Tag" resultMap="TagResult">
         select t.id,t.title,t.color,t.create_time,t.create_by ,count(tm.id) as count
         from tag t left join tag_mapping tm
         on t.id=tm.tag_id
@@ -42,14 +42,14 @@
           and t.id = #{id}
     </select>
 
-    <select id="selectTagByTitle" resultType="com.ckss.blog.home.blog.domain.Tag">
+    <select id="selectTagByTitle" resultType="com.ckss.project.blog.domain.Tag">
         select id, color, title, type
         from tag
         where title = #{title}
           and type = #{type}
     </select>
 
-    <select id="selectTagListByType" resultType="com.ckss.blog.home.blog.domain.Tag">
+    <select id="selectTagListByType" resultType="com.ckss.project.blog.domain.Tag">
         select t.id,
         color,
         title,
@@ -65,7 +65,7 @@
     </select>
 
 
-    <insert id="insertTag" parameterType="com.ckss.blog.home.blog.domain.Tag" useGeneratedKeys="true"
+    <insert id="insertTag" parameterType="com.ckss.project.blog.domain.Tag" useGeneratedKeys="true"
             keyProperty="id">
         insert into tag
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -99,7 +99,7 @@
         </trim>
     </insert>
 
-    <update id="updateTag" parameterType="com.ckss.blog.home.blog.domain.Tag">
+    <update id="updateTag" parameterType="com.ckss.project.blog.domain.Tag">
         update tag
         <set>
             <if test="title != null  and title != ''">title = #{title},</if>

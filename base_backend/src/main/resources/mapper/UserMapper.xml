@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ckss.blog.home.system.mapper.UserMapper">
+<mapper namespace="com.ckss.project.system.mapper.UserMapper">
 
-    <resultMap type="com.ckss.blog.home.system.domain.User" id="UserResult">
+    <resultMap type="com.ckss.project.system.domain.User" id="UserResult">
         <id property="id" column="id"/>
         <result property="userName" column="user_name"/>
         <result property="nickName" column="nick_name"/>
@@ -32,7 +32,7 @@
 		    left join role r on r.id = ur.role_id
     </sql>
 
-    <resultMap id="RoleResult" type="com.ckss.blog.home.system.domain.Role">
+    <resultMap id="RoleResult" type="com.ckss.project.system.domain.Role">
         <id property="id" column="id"/>
         <result property="roleName" column="role_name"/>
         <result property="roleKey" column="role_key"/>
@@ -41,7 +41,7 @@
     </resultMap>
 
 
-    <update id="updateUser" parameterType="com.ckss.blog.home.system.domain.User">
+    <update id="updateUser" parameterType="com.ckss.project.system.domain.User">
         update user
         <set>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
@@ -62,7 +62,7 @@
     </update>
 
 
-    <select id="queryUseList" parameterType="com.ckss.blog.home.system.domain.User" resultMap="UserResult">
+    <select id="queryUseList" parameterType="com.ckss.project.system.domain.User" resultMap="UserResult">
         <include refid="selectUserVo"/>
         where u.delete_time is null
         <if test="userName != null and userName != ''">
@@ -82,7 +82,7 @@
         </if>
     </select>
 
-    <insert id="insertUser" parameterType="com.ckss.blog.home.system.domain.User" useGeneratedKeys="true"
+    <insert id="insertUser" parameterType="com.ckss.project.system.domain.User" useGeneratedKeys="true"
             keyProperty="id">
         insert into user(
         <if test="id != null and id != 0">id,</if>
