@@ -32,25 +32,8 @@ aliyun:
   oss:
     file:
       endpoint: oss-cn-hangzhou.aliyuncs.com
-      keyid: LTAI4Fn9Q8Ld4NhVrShy9LZo
-      keysecret: HPzReljzlV0be78a35z8eLrjqcMgNV
+      keyid: LTAI4GC79ybPzfBSCyrf5MYR
+      keysecret: xU8WnbAhhk8OTfMgyMnitwqJvgRm0L
 #bucket可以在控制台创建，也可以使用java代码创建
-      bucketname: ckssblog
-      filehost: blog
-
-# FastDFS配置
-fdfs:
-  so-timeout: 1501
-  connect-timeout: 601
-  thumb-image: # 缩略图
-    width: 60
-    height: 60
-  tracker-list: # tracker地址
-    - 192.168.125.121:22122
-blog:
-  upload:
-    allowTypes:
-      - image/jpeg
-      - image/png
-      - image/bmp
-    baseUrl: http://192.168.125.121/
+      bucketname: ckss-demo
+      filehost: baseCode

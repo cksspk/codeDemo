@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 启动程序
  */
 @SpringBootApplication
-public class BaseApplication {
+public class BaseCodeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BaseApplication.class);
+        SpringApplication.run(BaseCodeApplication.class);
     }
 }

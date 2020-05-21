@@ -1,4 +1,4 @@
-package com.ckss.common.advice;
+package com.ckss.framework.web.exception;
 
 import com.ckss.common.exception.BlogException;
 import com.ckss.common.exception.CustomException;

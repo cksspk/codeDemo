@@ -4,9 +4,6 @@
       <el-tab-pane label="AliOss服务器" style="height: 400px;overflow-y: auto">
         <AliOssImageContent @onImgSelect="onImgSelect"/>
       </el-tab-pane>
-      <el-tab-pane label="FastDfs服务器" style="height: 400px;overflow-y: auto">
-        <FastDfsImageContent @onImgSelect="onImgSelect"/>
-      </el-tab-pane>
       <!-- <el-tab-pane label="本地服务器">
         <LocalImageContent @onImgSelect="onImgSelect"/>
       </el-tab-pane> -->
@@ -26,13 +23,12 @@
 
 <script>
   import AliOssImageContent from "./components/AliOssImageContent";
-  import FastDfsImageContent from "./components/FastDfsImageContent";
   import LocalImageContent from "./components/LocalImageContent";
 
   export default {
     name: "ImagePicker",
     components: {
-      AliOssImageContent,FastDfsImageContent,LocalImageContent
+      AliOssImageContent,LocalImageContent
     },
     data() {
       return {}

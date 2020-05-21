@@ -54,9 +54,9 @@ public class Swagger2Config {
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("标题：ckssBlog后台管理系统")
+                .title("标题：ckss后台管理系统")
                 // 描述
-                .description("博客后台端里系统接口定义")
+                .description("ckss后台系统接口定义")
                 // 作者信息
                 .contact(new Contact("cksspk", "https://www.cksspk.com", "cksspk@163.com"))
                 // 版本
