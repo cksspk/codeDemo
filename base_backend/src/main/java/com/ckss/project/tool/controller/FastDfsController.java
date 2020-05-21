@@ -1,7 +1,14 @@
 package com.ckss.project.tool.controller;
 
+import com.ckss.common.enums.ResultCodeEnum;
+import com.ckss.common.exception.BlogException;
+import com.ckss.common.exception.CustomException;
 import com.ckss.common.utils.StringUtils;
+import com.ckss.framework.web.controller.BaseController;
+import com.ckss.framework.web.domain.AjaxResult;
+import com.ckss.framework.web.page.TableDataInfo;
 import com.ckss.framework.web.vo.Result;
+import com.ckss.project.blog.domain.Blog;
 import com.ckss.project.tool.domain.FastDfsContent;
 import com.ckss.project.tool.service.FastDfsService;
 import com.github.pagehelper.PageInfo;
@@ -21,7 +28,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tool/fastDfs")
-public class FastDfsController {
+public class FastDfsController extends BaseController {
 
 
     @Autowired
@@ -30,39 +37,36 @@ public class FastDfsController {
     /**
      * 分页查询fastdfs图片
      * @param fastDfsContent
-     * @param pageNum
-     * @param pageSize
-     * @param orderBy
-     * @param desc
      * @return
      */
     @GetMapping("/list")
-    public Result getList(FastDfsContent fastDfsContent,
-                          @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
-                          @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
-                          @RequestParam(value = "orderBy",defaultValue = "create_time") String orderBy,
-                          @RequestParam(value = "IS_ASC",defaultValue = "false") Boolean desc
-    ){
+    public TableDataInfo getList(FastDfsContent fastDfsContent){
 
         //拼接条件
 //        PageMethod.startPage(pageNum, pageSize, orderBy);
-        PageMethod.startPage(pageNum, pageSize);
-
-
-        //执行查询
+//        PageMethod.startPage(pageNum, pageSize);
+//
+//
+//        //执行查询
+//        List<FastDfsContent> list = fastDfsService.selectContentList(fastDfsContent);
+//
+//        PageInfo<FastDfsContent> objectPageInfo = new PageInfo<>(list);
+//        long total = objectPageInfo.getTotal();
+//
+//        return Result.ok().data("list",list).data("totalPage",total);
+        startPage();
         List<FastDfsContent> list = fastDfsService.selectContentList(fastDfsContent);
-
-        PageInfo<FastDfsContent> objectPageInfo = new PageInfo<>(list);
-        long total = objectPageInfo.getTotal();
-
-        return Result.ok().data("list",list).data("totalPage",total);
+        return getDataTable(list);
     }
 
 
     @PostMapping
-    public Result upload(@RequestParam MultipartFile file){
-        FastDfsContent fastDfsContent = fastDfsService.upload(file);
-        return StringUtils.isNotNull(fastDfsContent) ?  Result.ok().data("data",fastDfsContent) : Result.error();
+    public AjaxResult upload(@RequestParam MultipartFile file){
+        FastDfsContent upload = fastDfsService.upload(file);
+        return AjaxResult.success(upload);
+
+//        FastDfsContent fastDfsContent = fastDfsService.upload(file);
+//        return StringUtils.isNotNull(fastDfsContent) ?  Result.ok().data("data",fastDfsContent) : Result.error();
 //        return Result.ok();
     }
 
@@ -70,10 +74,12 @@ public class FastDfsController {
 
     //删除逻辑 1. 根据图片id查找数据库中地址，根据imgurl删除fastdfs服务器中的数据
     @DeleteMapping
-    public Result delFileByIds(@PathVariable String ids){
-        int result = fastDfsService.delFileByIds(ids);
+    public AjaxResult delFileByIds(@PathVariable String ids){
+        return toAjax(fastDfsService.delFileByIds(ids));
+
+//        int result = fastDfsService.delFileByIds(ids);
 //        return StringUtils.isNotNull(aliOssContent) ?  Result.ok() : Result.error();
-        return result > 0 ? Result.ok() : Result.error();
+//        return result > 0 ? Result.ok() : Result.error();
     }
 
 }

@@ -7,7 +7,6 @@ import com.ckss.framework.web.domain.AjaxResult;
 import com.ckss.framework.web.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -53,7 +52,7 @@ public class BasicExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public AjaxResult handleException(RuntimeException e) {
         log.info("BlException:"+e.getMessage());
-        return AjaxResult.error(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+        return AjaxResult.error(e.getMessage());
     }
 
 

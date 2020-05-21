@@ -72,19 +72,21 @@
           return
         }
         this.loading = true;
+        // debugger
         listFastDfsImage(this.queryParams).then(response => {
+          // debugger
           if (this.imageList.length == response.total) {
             this.noMore = true;
           }
-          this.imageList.push(...response.data.list);
+          this.imageList.push(...response.rows);
           this.loading = false;
         });
       },
 
       /* <el-upload> 组件methods 新上传的文件没有时间参数是因为给，时间在数据库中生成*/
       handleAvatarSuccess(res, file) {
-        if(res.success){
-           this.imageList.push(res.data.data);
+        if(res.code === 200){
+           this.imageList.push(res.data);
         }else{
            this.$message.error('上传图片失败');
         }

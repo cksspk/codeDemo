@@ -14,7 +14,6 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
-    "ali-oss": "^6.7.0",
     "axios": "0.18.0",
     "element-ui": "2.13.0",
     "js-cookie": "2.2.0",

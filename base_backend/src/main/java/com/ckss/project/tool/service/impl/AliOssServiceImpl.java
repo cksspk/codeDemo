@@ -4,6 +4,7 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.CannedAccessControlList;
 import com.ckss.common.enums.ResultCodeEnum;
 import com.ckss.common.exception.BlogException;
+import com.ckss.common.exception.CustomException;
 import com.ckss.framework.config.aliyun.AliOssPropertiesUtil;
 import com.ckss.project.tool.domain.AliOssContent;
 import com.ckss.project.tool.mapper.AliOssContentMapper;
@@ -95,7 +96,8 @@ public class AliOssServiceImpl implements AliOssService {
 
             aliOssContentMapper.insertContent(aliOssContent);
         } catch (IOException e) {
-            throw new BlogException(ResultCodeEnum.FILE_UPLOAD_ERROR);
+//            throw new BlogException(ResultCodeEnum.FILE_UPLOAD_ERROR);
+            throw new CustomException("文件上传异常");
         }
 
         return aliOssContent;

@@ -1,9 +1,12 @@
 package com.ckss.project.system.controller;
 
 import com.ckss.common.constant.UserConstants;
+import com.ckss.framework.web.controller.BaseController;
 import com.ckss.framework.web.domain.AjaxResult;
+import com.ckss.framework.web.page.TableDataInfo;
 import com.ckss.framework.web.vo.Result;
 import com.ckss.project.system.domain.Role;
+import com.ckss.project.system.domain.User;
 import com.ckss.project.system.service.RoleService;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
@@ -21,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("system/role")
-public class RoleController {
+public class RoleController extends BaseController {
 
     @Autowired
     private RoleService roleService;
@@ -32,20 +35,21 @@ public class RoleController {
      * @return
      */
     @PostMapping
-    public Result addRole(@RequestBody Role role){
+    public AjaxResult addRole(@RequestBody Role role){
         //检测角色是否存在
         if(UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role))){
-            return Result.error().message("新增角色" + role.getRoleName() + "失败,角色已存在");
+            return AjaxResult.error("新增角色" + role.getRoleName() + "失败,角色已存在");
         }else if(UserConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role))) {
-            return Result.error().message("新增角色" + role.getRoleName() + "失败,角色权限已存在");
+            return AjaxResult.error("新增角色" + role.getRoleName() + "失败,角色权限已存在");
         }
 
         //通过scurity获取当前操作用户，设置为创建人  TODO
         String createBy = "test_create";
         role.setCreateBy(createBy);
 
-        int count = roleService.addRole(role);
-        return count > 0 ?Result.ok() : Result.error();
+//        int count = roleService.addRole(role);
+//        return count > 0 ?Result.ok() : Result.error();
+        return toAjax(roleService.addRole(role));
     }
 
 
@@ -55,42 +59,56 @@ public class RoleController {
      * @return
      */
     @DeleteMapping("/{ids}")
-    public Result deleteUserByIds(@PathVariable String ids){
-        int count = roleService.deleteRoleByIds(ids);
-        return count > 0 ?Result.ok() : Result.error();
+    public AjaxResult deleteUserByIds(@PathVariable String ids){
+//        int count = roleService.deleteRoleByIds(ids);
+//        return count > 0 ?Result.ok() : Result.error();
+        return toAjax(roleService.deleteRoleByIds(ids));
     }
+
 
 
     /**
      * 分页查找
      * @param role
-     * @param pageNum
-     * @param pageSize
      * @return
      */
     @GetMapping("/list")
-    public Result queryRoleList(
-            Role role,
-            @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-            @RequestParam(value = "orderBy",defaultValue = "create_time") String orderBy,
-            @RequestParam(value = "IS_ASC",defaultValue = "false") Boolean desc
-    ){
+    public TableDataInfo queryRoleList(Role role){
 
-        //orderBy 条件拼接增加校验  TODO
-        orderBy = orderBy + (desc ? " ASC" : " DESC");
-        //拼接条件
-        PageMethod.startPage(pageNum, pageSize, orderBy);
-
-        //执行查询
+        startPage();
         List<Role> roles = roleService.queryRoleList(role);
-
-        PageInfo<Role> objectPageInfo = new PageInfo<>(roles);
-        long total = objectPageInfo.getTotal();
-
-        return Result.ok().data("roleList",roles).data("totalPage",total);
+        return getDataTable(roles);
     }
 
+//    /**
+//     * 分页查找
+//     * @param role
+//     * @param pageNum
+//     * @param pageSize
+//     * @return
+//     */
+//    @GetMapping("/list1")
+//    public Result queryRoleList1(
+//            Role role,
+//            @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
+//            @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
+//            @RequestParam(value = "orderBy",defaultValue = "create_time") String orderBy,
+//            @RequestParam(value = "IS_ASC",defaultValue = "false") Boolean desc
+//    ){
+//
+//        //orderBy 条件拼接增加校验  TODO
+//        orderBy = orderBy + (desc ? " ASC" : " DESC");
+//        //拼接条件
+//        PageMethod.startPage(pageNum, pageSize, orderBy);
+//
+//        //执行查询
+//        List<Role> roles = roleService.queryRoleList(role);
+//
+//        PageInfo<Role> objectPageInfo = new PageInfo<>(roles);
+//        long total = objectPageInfo.getTotal();
+//
+//        return Result.ok().data("roleList",roles).data("totalPage",total);
+//    }
 
 
     /**

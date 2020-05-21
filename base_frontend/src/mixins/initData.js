@@ -28,7 +28,8 @@ export default {
       // 日期范围
       dateRange: [],
       //用来重置表单的form,有些属性清空不了
-      formReset: {},
+      formReset: {
+      },
       // 表单参数
       form: {},
       // 查询参数
@@ -110,6 +111,7 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      // debugger
       this.reset();
       this.title = "添加" + this.modelName;
       this.form = this.formReset;
@@ -164,6 +166,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      // debugger
       const data = row || this.row;
       this.form = data;
       this.open = true;

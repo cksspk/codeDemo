@@ -3,7 +3,11 @@ package com.ckss.project.blog.controller;
 import com.ckss.common.constant.Constants;
 import com.ckss.common.enums.ResultCodeEnum;
 import com.ckss.common.exception.BlogException;
+import com.ckss.framework.web.controller.BaseController;
+import com.ckss.framework.web.domain.AjaxResult;
+import com.ckss.framework.web.page.TableDataInfo;
 import com.ckss.framework.web.vo.Result;
+import com.ckss.project.blog.domain.Blog;
 import com.ckss.project.blog.domain.Category;
 import com.ckss.project.blog.service.CategoryService;
 import com.github.pagehelper.PageInfo;
@@ -23,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/blog/category")
-public class CategoryController {
+public class CategoryController extends BaseController {
 
 
     @Autowired
@@ -33,32 +37,28 @@ public class CategoryController {
     /**
      * 分页查询
      * @param category
-     * @param pageNum
-     * @param pageSize
-     * @param orderBy
-     * @param desc
      * @return
      */
     @GetMapping("/list")
-    public Result getCategoryList(Category category,
-                                  @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
-                                  @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                                  @RequestParam(value = "orderBy",defaultValue = "create_time") String orderBy,
-                                  @RequestParam(value = "IS_ASC",defaultValue = "false") Boolean desc
-          ){
+    public TableDataInfo getCategoryList(Category category){
 
-        //orderBy 条件拼接增加校验  TODO
-        orderBy = orderBy + (desc ? " ASC" : " DESC");
-        //拼接条件
-        PageMethod.startPage(pageNum, pageSize, orderBy);
+//        //orderBy 条件拼接增加校验  TODO
+//        orderBy = orderBy + (desc ? " ASC" : " DESC");
+//        //拼接条件
+//        PageMethod.startPage(pageNum, pageSize, orderBy);
+//
+//        //执行查询
+//        List<Category> list = categoryService.getCategoryList(category);
+//
+//        PageInfo<Category> objectPageInfo = new PageInfo<>(list);
+//        long total = objectPageInfo.getTotal();
+//
+//        return Result.ok().data("list",list).data("totalPage",total);
 
-        //执行查询
+
+        startPage();
         List<Category> list = categoryService.getCategoryList(category);
-
-        PageInfo<Category> objectPageInfo = new PageInfo<>(list);
-        long total = objectPageInfo.getTotal();
-
-        return Result.ok().data("list",list).data("totalPage",total);
+        return getDataTable(list);
     }
 
 
@@ -68,7 +68,7 @@ public class CategoryController {
      * @return
      */
     @PostMapping()
-    public Result add(@RequestBody @Validated Category category) {
+    public AjaxResult add(@RequestBody @Validated Category category) {
         //检查分类是否存在
         if(Constants.NOT_UNIQUE.equals(categoryService.checkCategoryNameUnique(category))){
             throw new BlogException(ResultCodeEnum.CATEGORY_TITLE_NOT_UNIQUE);
@@ -77,9 +77,10 @@ public class CategoryController {
         //根据当前登陆账号获取创建者  TODO
         String createBy = "createBy_test";
         category.setCreateBy(createBy);
-        int result = categoryService.insertCategory(category);
 
-        return result > 0 ? Result.ok() : Result.error();
+//        int result = categoryService.insertCategory(category);
+//        return result > 0 ? Result.ok() : Result.error();
+        return toAjax(categoryService.insertCategory(category));
     }
 
     /**
@@ -88,7 +89,7 @@ public class CategoryController {
      * @return
      */
     @PutMapping()
-    public Result edit(@RequestBody @Validated Category category) {
+    public AjaxResult edit(@RequestBody @Validated Category category) {
         //检查分类是否存在
         if(Constants.NOT_UNIQUE.equals(categoryService.checkCategoryNameUnique(category))){
             throw new BlogException(ResultCodeEnum.CATEGORY_TITLE_NOT_UNIQUE);
@@ -97,8 +98,10 @@ public class CategoryController {
         String updateBy = "update_test";
         category.setUpdateBy(updateBy);
 
-        int result = categoryService.updateCategory(category);
-        return result > 0 ? Result.ok() : Result.error();
+        return toAjax(categoryService.updateCategory(category));
+
+//        int result = categoryService.updateCategory(category);
+//        return result > 0 ? Result.ok() : Result.error();
     }
 
     /**
@@ -107,9 +110,10 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping("/{ids}")
-    public Result remove(@PathVariable String ids) {
-        int result = categoryService.deleteCategoryByIds(ids);
-        return result > 0 ? Result.ok() : Result.error();
+    public AjaxResult remove(@PathVariable String ids) {
+        return toAjax(categoryService.deleteCategoryByIds(ids));
+//        int result = categoryService.deleteCategoryByIds(ids);
+//        return result > 0 ? Result.ok() : Result.error();
     }
 
 }

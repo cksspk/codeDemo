@@ -2,6 +2,7 @@ package com.ckss.project.tool.service.impl;
 
 import com.ckss.common.enums.ResultCodeEnum;
 import com.ckss.common.exception.BlogException;
+import com.ckss.common.exception.CustomException;
 import com.ckss.common.utils.StringUtils;
 import com.ckss.framework.config.fastDsf.FastDfsUploadProperties;
 import com.ckss.project.tool.domain.FastDfsContent;
@@ -10,7 +11,9 @@ import com.ckss.project.tool.service.FastDfsService;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,7 +49,8 @@ public class FastDfsServiceImpl implements FastDfsService {
         String contentType = file.getContentType();
         if (!prop.getAllowTypes().contains(contentType)) {
             log.info("上传失败，文件类型不匹配：{}", contentType);
-            throw new BlogException(ResultCodeEnum.INVALID_FILE_FORMAT);
+//            throw new BlogException(ResultCodeEnum.INVALID_FILE_FORMAT);
+            throw new CustomException("文件上传异常", HttpStatus.BAD_REQUEST);
         }
 
         //检验文件内容
@@ -54,11 +58,13 @@ public class FastDfsServiceImpl implements FastDfsService {
             BufferedImage image = ImageIO.read(file.getInputStream());
             if (image == null) {
                 log.info("【文件上传】上传文件格式错误");
-                throw new BlogException(ResultCodeEnum.INVALID_FILE_FORMAT);
+//                throw new BlogException(ResultCodeEnum.INVALID_FILE_FORMAT);
+                throw new CustomException("文件上传异常", HttpStatus.BAD_REQUEST);
             }
         } catch (IOException e) {
             log.info("【文件上传】文件上传失败", e);
-            throw new BlogException(ResultCodeEnum.INVALID_FILE_FORMAT);
+//            throw new BlogException(ResultCodeEnum.INVALID_FILE_FORMAT);
+            throw new CustomException("文件上传异常", HttpStatus.BAD_REQUEST);
         }
 
         FastDfsContent fastDfsContent = null;
@@ -89,7 +95,8 @@ public class FastDfsServiceImpl implements FastDfsService {
 //            return prop.getBaseUrl() + storePath.getFullPath();
         } catch (IOException e) {
             log.info("【文件上传】文件上传失败", e);
-            throw new BlogException(ResultCodeEnum.UPLOAD_IMAGE_EXCEPTION);
+//            throw new BlogException(ResultCodeEnum.UPLOAD_IMAGE_EXCEPTION);
+            throw new CustomException("文件上传异常");
         }
         return fastDfsContent;
 

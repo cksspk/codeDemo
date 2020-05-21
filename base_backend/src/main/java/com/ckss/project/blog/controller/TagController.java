@@ -4,12 +4,18 @@ import com.ckss.common.constant.Constants;
 import com.ckss.common.constant.TagConstants;
 import com.ckss.common.enums.ResultCodeEnum;
 import com.ckss.common.exception.BlogException;
+import com.ckss.common.exception.CustomException;
+import com.ckss.framework.web.controller.BaseController;
+import com.ckss.framework.web.domain.AjaxResult;
+import com.ckss.framework.web.page.TableDataInfo;
 import com.ckss.framework.web.vo.Result;
 import com.ckss.project.blog.domain.Tag;
 import com.ckss.project.blog.service.TagService;
+import com.ckss.project.tool.domain.FastDfsContent;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("blog/tag")
-public class TagController {
+public class TagController extends BaseController {
 
     @Autowired
     private TagService tagService;
@@ -33,35 +39,29 @@ public class TagController {
     /**
      * 分页查找标签
      * @param tag   标签
-     * @param pageNum 页码
-     * @param pageSize 每页数量
-     * @param orderBy 排序
-     * @param desc 规则
      * @return
      */
     @GetMapping("/list")
-    public Result getTagList(Tag tag,
-                             @RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
-                             @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                             @RequestParam(value = "orderBy",defaultValue = "create_time") String orderBy,
-                             @RequestParam(value = "IS_ASC",defaultValue = "false") Boolean desc
-                            ){
+    public TableDataInfo getTagList(Tag tag){
 
         //orderBy 条件拼接增加校验  TODO
-        orderBy = orderBy + (desc ? " ASC" : " DESC");
-        //拼接条件
-        PageMethod.startPage(pageNum, pageSize, orderBy);
-
-        //设置标签的类型
-        tag.setType(TagConstants.BLOG);
-
-        //执行查询
+//        orderBy = orderBy + (desc ? " ASC" : " DESC");
+//        //拼接条件
+//        PageMethod.startPage(pageNum, pageSize, orderBy);
+//
+//        //设置标签的类型
+//        tag.setType(TagConstants.BLOG);
+//
+//        //执行查询
+//        List<Tag> list = tagService.selectTagList(tag);
+//
+//        PageInfo<Tag> objectPageInfo = new PageInfo<>(list);
+//        long total = objectPageInfo.getTotal();
+//
+//        return Result.ok().data("list",list).data("totalPage",total);
+        startPage();
         List<Tag> list = tagService.selectTagList(tag);
-
-        PageInfo<Tag> objectPageInfo = new PageInfo<>(list);
-        long total = objectPageInfo.getTotal();
-
-        return Result.ok().data("list",list).data("totalPage",total);
+        return getDataTable(list);
     }
 
     /**
@@ -70,7 +70,7 @@ public class TagController {
      * @return
      */
     @PutMapping()
-    public Result edit(@RequestBody @Validated Tag tag) {
+    public AjaxResult edit(@RequestBody @Validated Tag tag) {
         //检查标签是否存在
         if(Constants.NOT_UNIQUE.equals(tagService.checkTagNameUnique(tag))){
             throw new BlogException(ResultCodeEnum.TAG_TITLE_NOT_UNIQUE);
@@ -79,8 +79,9 @@ public class TagController {
         String updateBy = "update_tag_test";
         tag.setUpdateBy(updateBy);
 
-        int result = tagService.updateTag(tag);
-        return result > 0 ? Result.ok() : Result.error();
+        return toAjax(tagService.updateTag(tag));
+//        int result = tagService.updateTag(tag);
+//        return result > 0 ? Result.ok() : Result.error();
     }
 
 
@@ -90,10 +91,11 @@ public class TagController {
      * @return
      */
     @PostMapping()
-    public Result add(@RequestBody @Validated Tag tag) {
+    public AjaxResult add(@RequestBody @Validated Tag tag) {
         //检查标签是否存在
         if(Constants.NOT_UNIQUE.equals(tagService.checkTagNameUnique(tag))){
-            throw new BlogException(ResultCodeEnum.TAG_TITLE_NOT_UNIQUE);
+//            throw new BlogException(ResultCodeEnum.TAG_TITLE_NOT_UNIQUE);
+            throw new CustomException("标签已存在", HttpStatus.BAD_REQUEST);
         }
 //        category.setCreateBy(SecurityUtils.getUsername());
         //根据当前登陆账号获取创建者  TODO
@@ -101,9 +103,9 @@ public class TagController {
         tag.setCreateBy(createBy);
         tag.setType(TagConstants.BLOG);
 
-        int result = tagService.insertTag(tag);
-
-        return result > 0 ? Result.ok() : Result.error();
+        return toAjax(tagService.insertTag(tag));
+//        int result = tagService.insertTag(tag);
+//        return result > 0 ? Result.ok() : Result.error();
     }
 
 
@@ -113,9 +115,10 @@ public class TagController {
      * @return
      */
     @DeleteMapping("/{ids}")
-    public Result remove(@PathVariable String ids) {
-        int result = tagService.deleteTagByIds(ids);
-        return result > 0 ? Result.ok() : Result.error();
+    public AjaxResult remove(@PathVariable String ids) {
+        return toAjax(tagService.deleteTagByIds(ids));
+//        int result = tagService.deleteTagByIds(ids);
+//        return result > 0 ? Result.ok() : Result.error();
     }
 
 

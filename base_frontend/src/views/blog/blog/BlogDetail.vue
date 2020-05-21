@@ -216,18 +216,18 @@
         }
       },
       //上传文件成功回调方法 --废弃
-      handleUploadSuccess(res, file) {
-        debugger
-        if (res.code == 200) {
-          this.form.headerImg = res.data.url;
-          //修改headerImgType
-          if (this.form.headerImgType == 0) {
-            this.form.headerImgType = 1;
-          }
-        } else {
-          this.msgError("上传文件失败!" + res.message);
-        }
-      },
+      // handleUploadSuccess(res, file) {
+      //   debugger
+      //   if (res.code == 200) {
+      //     this.form.headerImg = res.data.url;
+      //     //修改headerImgType
+      //     if (this.form.headerImgType == 0) {
+      //       this.form.headerImgType = 1;
+      //     }
+      //   } else {
+      //     this.msgError("上传文件失败!" + res.message);
+      //   }
+      // },
       //查询标签
       getRemoteTagList(query) {
         if (query !== '') {
@@ -248,9 +248,10 @@
       //获取文章分类
       getCategory() {
         listCategory().then(response => {
+          // debugger
             console.log('查询分类，返回：',response)
             if (response.code === 200) {
-              this.categoryOptions = response.data.list;
+              this.categoryOptions = response.list;
             } else {
               this.msgError(response.msg);
             }
@@ -259,12 +260,12 @@
       },
       fetchData(id) {
         getBlog(id).then(response => {
-          
+          // debugger
           if (!response.code === 200) {
-            this.msgError(response.message);
+            this.msgError(response.msg);
             return;
           }
-          this.form = response.data.data;
+          this.form = response.data;
         })
       },
       submitBlog() {
@@ -278,7 +279,7 @@
             let obj = JSON.parse(JSON.stringify(this.form));
             if (obj.id == undefined) {
               addBlog(obj).then(response => {
-                if (response.seccess) {
+                if (response.code === 200) {
                   this.msgSuccess("发布成功");
                   this.$store.dispatch('tagsView/delView', this.$route);
                   this.$router.push({path: '/blogManage/blog'})
