@@ -14,7 +14,7 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
     <insert id="insertContent" useGeneratedKeys="true" keyProperty="id">
-        insert into qi_niu_content(
+        insert into ali_oss_content(
         <if test="name != null and name != ''">name,</if>
         <if test="bucket != null and bucket != ''">bucket,</if>
         <if test="size != null and size != ''">size,</if>
@@ -38,14 +38,14 @@
     <!--查询单个-->
     <select id="selectContentById" resultMap="AliOssContentMap">
         select id, name, bucket, size, url, suffix, type, create_by, create_time
-        from qi_niu_content
+        from ali_oss_content
         where id = #{id}
     </select>
 
     <!--通过实体作为筛选条件查询-->
     <select id="selectContentList" resultMap="AliOssContentMap">
         select id, name, bucket, size, url, suffix, type, create_by, create_time
-        from qi_niu_content
+        from ali_oss_content
         <where>
             <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')
@@ -69,7 +69,7 @@
     </select>
     <select id="selectContentByIds" resultType="com.ckss.project.tool.domain.AliOssContent">
         select id, name, bucket, size, url, suffix, type, create_by, create_time
-        from qi_niu_content
+        from ali_oss_content
         where id in
         <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
@@ -78,13 +78,13 @@
 
     <!--通过主键删除-->
     <delete id="deleteContentByIds">
-        delete from qi_niu_content where id in
+        delete from ali_oss_content where id in
         <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
     <delete id="clearContent">
-        TRUNCATE TABLE qi_niu_content
+        TRUNCATE TABLE ali_oss_content
     </delete>
 
 </mapper>

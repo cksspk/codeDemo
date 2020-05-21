@@ -12,4 +12,10 @@ git pull origin baseCode
 
 ```
 
+### 介绍
 
+前后台分离基础增删改查项目，资源使用阿里云`oss`对象储存。
+
+前台：`vue-admin-template`
+
+后台：`springboot` `mybatis`
